@@ -1,0 +1,65 @@
+<?xml version="1.0"?>
+
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+    <xacro:macro name="skd100_wheel" params="wheel_prefix joint_xyz:='0 0 0' joint_rpy:='0 0 0' left_side:=false">
+    
+        <xacro:property name="link_name" value="${wheel_prefix}_wheel_link" />
+        <xacro:property name="joint_name" value="${wheel_prefix}_wheel_joint" />
+
+        <link name="${link_name}">
+            <visual>
+                <xacro:if value="${left_side}">
+                    <origin xyz="0 0 0" rpy="${pi/2} 0 ${-pi/2}"/>
+                </xacro:if>
+                <xacro:unless value="${left_side}">
+                    <origin xyz="0 0 0" rpy="${pi/2} 0 ${pi/2}"/>
+                </xacro:unless>
+
+                <geometry>
+                    <mesh filename="package://skd100_description/meshes/wheel-assembly.stl" scale="0.001 0.001 0.001" />
+                </geometry> 
+                
+                <material name="Dark gray">
+                    <color rgba="0.175 0.175 0.175 1.0"/>
+                </material>
+            </visual>
+            <collision>
+                <xacro:if value="${left_side}">
+                    <origin xyz="0 0 0" rpy="${pi/2} 0 0"/>
+                </xacro:if>
+                <xacro:unless value="${left_side}">
+                    <origin xyz="0 0 0" rpy="${pi/2} 0 0"/>
+                </xacro:unless>
+                <geometry>
+                    <cylinder radius="${wheel_radius}" length="${wheel_width}"/>
+                </geometry>
+            </collision>
+            <xacro:inertial_cylinder mass="${wheel_mass}" length="${wheel_width}" radius="${wheel_radius}">
+                <xacro:if value="${left_side}">
+                    <origin xyz="0 0 0" rpy="${pi/2} 0 0"/>
+                </xacro:if>
+                <xacro:unless value="${left_side}">
+                    <origin xyz="0 0 0" rpy="${pi/2} 0 0"/>
+                </xacro:unless>
+            </xacro:inertial_cylinder>
+        </link>
+
+        <joint name="${joint_name}" type="continuous">
+            <parent link="base_link"/>
+            <child link="${link_name}" />
+            <origin xyz="${joint_xyz}" rpy="${joint_rpy}" />
+            <axis xyz="0 1 0" rpy="0 0 0" />
+        </joint>
+
+        <!-- Gazebo material for the wheel-->
+        <gazebo reference="${link_name}">
+            <visual>
+                <material>
+                    <ambient>0.175 0.175 0.175 1.0</ambient>
+                    <diffuse>0.175 0.175 0.175 1.0</diffuse>
+                    <specular>0.175 0.175 0.175 1.0</specular>
+                </material>
+            </visual>
+        </gazebo>
+    </xacro:macro>
+</robot>

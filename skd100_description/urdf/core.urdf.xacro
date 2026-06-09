@@ -1,0 +1,125 @@
+<?xml version="1.0"?>
+
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+    <xacro:include filename="$(find skd100_description)/urdf/inertial_macros.xacro" />
+    <xacro:include filename="$(find skd100_description)/urdf/wheel.xacro" />
+
+	<xacro:include filename="$(find skd100_description)/urdf/materials.xacro" />
+    
+	<!-- Distance between front and rear wheel axles (wheelbase) -->
+	<xacro:property name="wheel_distance" value="0.25" />
+
+	<!-- Distance between the centerlines of the left and right wheels (track width) -->
+	<xacro:property name="wheel_separation" value="0.475" />
+
+	<!-- Chassis size -->
+	<xacro:property name="chassis_x_size" value="0.45" />
+	<xacro:property name="chassis_y_size" value="0.38" />
+	<xacro:property name="chassis_z_size" value="0.05" />
+
+	<!-- Z-coordinate of the chassis relative to the base_link -->
+	<xacro:property name="chassis_z_coord" value="0.0274" />
+
+	<!-- Vehicle total mass -->
+	<xacro:property name="vehicle_mass" value="10.0" />
+
+	<!-- Wheel properties -->
+	<xacro:property name="wheel_mass" value="0.150" />
+	<xacro:property name="wheel_radius" value="${0.160/2}" />
+	<xacro:property name="wheel_width" value="0.047" />
+
+    <link name="base_link">
+
+		<visual>
+			<origin xyz="0 0 ${chassis_z_coord}" rpy="${pi/2} 0 ${-pi/2}"/>
+			<geometry>
+				<mesh filename="package://skd100_description/meshes/skd100_chassis.stl"  scale="0.001 0.001 0.001"/>
+			</geometry>
+			<material name="White" />
+		</visual>
+
+		<collision>
+			<origin xyz="0 0 ${-chassis_z_size/2+chassis_z_coord}"/>
+			<geometry>
+				<box size="${chassis_x_size} ${chassis_y_size} ${chassis_z_size}"/>
+			</geometry>
+		</collision>
+
+		<!-- Electric box -->
+		<visual>
+    		<origin xyz="${chassis_x_size/2 + 0.045} 0 ${chassis_z_size/2 + 0.06}" rpy="0 0 0" />
+			<geometry>
+				<box size="0.09 0.17 0.12"/>
+			</geometry>
+		</visual>
+
+		<collision>
+			<origin xyz="${chassis_x_size/2 + 0.045} 0 ${chassis_z_size/2 + 0.06}" rpy="0 0 0" />
+			<geometry>
+				<box size="0.09 0.17 0.12"/>
+			</geometry>
+		</collision>
+
+		<!-- Antenna Upright Support -->
+		<xacro:property name="upright_support_height" value="0.395" />
+		<xacro:property name="upright_support_y_pos" value="0.17525" />
+		<visual>
+    		<origin xyz="0 ${upright_support_y_pos} ${upright_support_height/2+chassis_z_coord}" rpy="0 0 0" />
+			<geometry>
+				<box size="0.0555 0.005 ${upright_support_height}"/>
+			</geometry>
+		</visual>
+
+		<visual>
+			<origin xyz="0 ${-upright_support_y_pos} ${upright_support_height/2+chassis_z_coord}" rpy="0 0 0" />
+			<geometry>
+				<box size="0.0555 0.005 ${upright_support_height}"/>
+			</geometry>
+		</visual>
+
+    </link>
+
+	<!-- Base footprint is on the ground under the robot -->
+    <link name="base_footprint">
+		<xacro:dummy_inertial />
+	</link>
+
+    <joint name="base_footprint_joint" type="fixed">
+        <origin xyz="0 0 ${-wheel_radius}" rpy="0 0 0" />
+        <parent link="base_link" />
+        <child link="base_footprint" />
+    </joint>
+
+	<!-- Interial link stores the robot's inertial information -->
+    <link name="inertial_link">
+		<xacro:inertial_box mass="${vehicle_mass}" x="${chassis_x_size}" y="${chassis_y_size}" z="${chassis_z_size}">
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+        </xacro:inertial_box>
+    </link>
+
+    <joint name="inertial_joint" type="fixed">
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <parent link="base_link" />
+        <child link="inertial_link" />
+    </joint>
+
+	<!-- Wheel macros -->
+	<xacro:skd100_wheel wheel_prefix="front_left"
+		joint_xyz="${wheel_distance/2} ${wheel_separation/2} 0"
+		left_side="true"
+		/>
+	<xacro:skd100_wheel wheel_prefix="front_right"
+		joint_xyz="${wheel_distance/2} ${-wheel_separation/2} 0"
+		left_side="false"
+		/>
+	<xacro:skd100_wheel wheel_prefix="rear_left"
+		joint_xyz="${-wheel_distance/2} ${wheel_separation/2} 0"
+		left_side="true"
+		/>
+	<xacro:skd100_wheel wheel_prefix="rear_right"
+		joint_xyz="${-wheel_distance/2} ${-wheel_separation/2} 0"
+		left_side="false"
+		/>
+
+</robot>

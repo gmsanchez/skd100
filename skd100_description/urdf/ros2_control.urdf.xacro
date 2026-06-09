@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+    <ros2_control name="SKDHardware" type="system">
+        <hardware>
+            <plugin>skd_base/SKDHardware</plugin>
+            <param name="serial_port">/dev/ttyBPILL</param>
+            <param name="baud_rate">115200</param>
+            <param name="flow_control">none</param>
+            <param name="parity">none</param>
+            <param name="stop_bits">1</param>
+            <param name="update_rate">20</param>
+        </hardware>
+
+        <joint name="front_left_wheel_joint">
+            <command_interface name="velocity" />
+            <state_interface name="position">
+                <param name="initial_value">0.0</param>
+            </state_interface>
+            <state_interface name="velocity">
+                <param name="initial_value">0.0</param>
+            </state_interface>
+        </joint>
+        <joint name="front_right_wheel_joint">
+            <command_interface name="velocity" />
+            <state_interface name="position">
+                <param name="initial_value">0.0</param>
+            </state_interface>
+            <state_interface name="velocity">
+                <param name="initial_value">0.0</param>
+            </state_interface>
+        </joint>
+        <joint name="rear_left_wheel_joint">
+            <command_interface name="velocity" />
+            <state_interface name="position">
+                <param name="initial_value">0.0</param>
+            </state_interface>
+            <state_interface name="velocity">
+                <param name="initial_value">0.0</param>
+            </state_interface>
+        </joint>
+        <joint name="rear_right_wheel_joint">
+            <command_interface name="velocity" />
+            <state_interface name="position">
+                <param name="initial_value">0.0</param>
+            </state_interface>
+            <state_interface name="velocity">
+                <param name="initial_value">0.0</param>
+            </state_interface>
+        </joint>
+    </ros2_control>
+
+</robot>
