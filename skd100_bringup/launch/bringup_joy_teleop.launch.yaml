@@ -1,0 +1,9 @@
+launch:
+  - include:
+      file: "$(find-pkg-share skd100_control)/launch/ros2_control.launch.py"
+
+  - include:
+      file: "$(find-pkg-share skd100_teleop)/launch/twist_mux.launch.py"
+
+  - include:
+      file: "$(find-pkg-share skd100_teleop)/launch/teleop_twist_joy.launch.py"

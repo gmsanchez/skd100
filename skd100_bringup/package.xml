@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<package format="3">
+  <name>skd100_bringup</name>
+  <version>1.0.0</version>
+  <description>Package that holds different configurations on launch files for the SKD-100 bringup.</description>
+  <license>Apache-2.0</license>
+
+  <author email="gsanchez@sinc.unl.edu.ar">Guido Sanchez</author>
+  <author email="acapovilla@sinc.unl.edu.ar">Agustin Capovilla</author>
+
+  <maintainer email="gsanchez@sinc.unl.edu.ar">Guido Sanchez</maintainer>
+
+  <depend>skd100_description</depend>
+  <depend>skd100_control</depend>
+  <depend>skd100_teleop</depend>
+
+  <test_depend>ament_lint_auto</test_depend>
+  <test_depend>ament_lint_common</test_depend>
+
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
+</package>
