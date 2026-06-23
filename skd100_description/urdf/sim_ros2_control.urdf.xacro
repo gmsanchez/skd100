@@ -1,0 +1,71 @@
+<?xml version="1.0"?>
+
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+    <ros2_control name="GazeboSystem" type="system">
+		<hardware>
+            <plugin>gz_ros2_control/GazeboSimSystem</plugin>
+		</hardware>
+
+		<joint name="front_left_wheel_joint">
+            <command_interface name="velocity" />
+            <state_interface name="position">
+                <param name="initial_value">0.0</param>
+            </state_interface>
+            <state_interface name="velocity">
+                <param name="initial_value">0.0</param>
+            </state_interface>
+        </joint>
+        <joint name="front_right_wheel_joint">
+            <command_interface name="velocity" />
+            <state_interface name="position">
+                <param name="initial_value">0.0</param>
+            </state_interface>
+            <state_interface name="velocity">
+                <param name="initial_value">0.0</param>
+            </state_interface>
+        </joint>
+        <joint name="rear_left_wheel_joint">
+            <command_interface name="velocity" />
+            <state_interface name="position">
+                <param name="initial_value">0.0</param>
+            </state_interface>
+            <state_interface name="velocity">
+                <param name="initial_value">0.0</param>
+            </state_interface>
+        </joint>
+        <joint name="rear_right_wheel_joint">
+            <command_interface name="velocity" />
+            <state_interface name="position">
+                <param name="initial_value">0.0</param>
+            </state_interface>
+            <state_interface name="velocity">
+                <param name="initial_value">0.0</param>
+            </state_interface>
+        </joint>
+
+	</ros2_control>
+
+	<gazebo>
+		<plugin filename="gz_ros2_control-system" name="gz_ros2_control::GazeboSimROS2ControlPlugin">
+			<parameters>$(find skd100_control)/config/controllers.yaml</parameters>
+		</plugin>
+	</gazebo>
+
+	<gazebo>
+		<!-- https://gazebosim.org/api/sim/8/classgz_1_1sim_1_1systems_1_1OdometryPublisher.html -->
+        <plugin filename="gz-sim-odometry-publisher-system" name="gz::sim::systems::OdometryPublisher">
+			<odom_frame>odom</odom_frame>
+			<robot_base_frame>base_link</robot_base_frame>
+			<odom_publish_frequency>50</odom_publish_frequency>
+			<odom_topic>/skd_base_controller/ground_truth/odom</odom_topic>
+			<odom_covariance_topic>/skd_base_controller/ground_truth/odom_with_covariance</odom_covariance_topic>
+			<!-- <tf_topic>/ground_truth/pose</tf_topic> -->
+			<dimensions>3</dimensions>
+			<xyz_offset>0 0 0</xyz_offset>
+			<rpy_offset>0 0 0</rpy_offset>
+			<gaussian_noise>0</gaussian_noise>
+        </plugin>
+    </gazebo>
+
+</robot>

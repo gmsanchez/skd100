@@ -1,0 +1,90 @@
+<?xml version="1.0"?>
+
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+    <gazebo>
+        <plugin filename="gz-sim-sensors-system" name="gz::sim::systems::Sensors">
+            <render_engine>ogre2</render_engine>
+        </plugin>
+
+        <plugin filename="gz-sim-imu-system" name="gz::sim::systems::Imu"/>
+        
+        <plugin filename="gz-sim-magnetometer-system" name="gz::sim::systems::Magnetometer" />
+
+        <plugin filename="gz-sim-navsat-system" name="gz::sim::systems::NavSat" />
+    </gazebo>
+
+    <gazebo reference="xsens_imu_link">
+        <sensor name="xsens_imu" type="imu">
+            <pose>0 0 0 0 0 0</pose>
+            <always_on>true</always_on>
+            <update_rate>100</update_rate>
+            <visualize>true</visualize>
+            <topic>mti_630_8A1G6/imu/data</topic>
+            <pose relative_to='xsens_imu_link'>0 0 0 0 0 0</pose>
+            <gz_frame_id>xsens_imu_link</gz_frame_id>
+            <!-- Refer to https://sdformat.org/spec/1.12/sensor/#sensor_imu for add noise -->
+        </sensor>
+
+        <sensor name="xsens_mag" type="magnetometer">
+            <always_on>true</always_on>
+            <update_rate>20</update_rate>
+            <visualize>true</visualize>
+            <topic>mti_630_8A1G6/imu/mag</topic>
+            <pose relative_to='xsens_imu_link'>0 0 0 0 0 0</pose>
+            <gz_frame_id>xsens_imu_link</gz_frame_id>
+            <!-- Refer to https://sdformat.org/spec/1.12/sensor/#sensor_magnetometer for add noise -->
+        </sensor>
+    </gazebo>
+
+    <gazebo reference="rplidar_optical_link">
+        <sensor name="rplidar" type="gpu_lidar">
+            <pose>0 0 0 0 0 0</pose>
+            <always_on>true</always_on>
+            <update_rate>10</update_rate>
+            <visualize>true</visualize>
+            <topic>scan_raw</topic>
+            <gz_frame_id>rplidar_optical_link</gz_frame_id>
+            <lidar>
+                <scan>
+                    <horizontal>
+                        <!-- Angular resolution 0.1125° -->
+                        <samples>3200</samples>             <!-- 360°/0.1125° -->
+                        <resolution>1.0</resolution>
+                        <min_angle>${-pi}</min_angle>
+                        <max_angle>${pi}</max_angle>
+                    </horizontal>
+                </scan>
+                <range>
+                    <!-- To avoid collision with it self, use greater min distance than real sensor -->
+                    <min>0.35</min>
+                    <!-- <min>0.05</min> -->
+
+                    <!-- White object: 0.05-40 meters (under 70% reflection) -->
+                    <!-- Black object: 0.05-15 meters (under 10% reflection) -->
+                    <max>32.0</max>    <!-- interpolation 50% reflection -->
+                    <!-- Resolution 10mm -->
+                    <resolution>0.010</resolution>
+                </range>
+                <noise>
+                    <type>gaussian</type>
+                    <mean>0.0</mean>
+                    <!-- Accuracy: 0~8m：±25mm / ≥8m：±50mm -->
+                    <!-- [±25mm -> ±3*σ (99.7%)] σ = 0.025​/3 ≈ 0.0083 m -->
+                    <stddev>0.0083</stddev>
+                </noise>
+            </lidar>
+        </sensor>
+    </gazebo>
+
+    <gazebo reference="gps_main_antenna_link">
+        <sensor name="ublox_f9p_navsat" type="navsat">
+            <always_on>true</always_on>
+            <update_rate>5</update_rate>
+            <topic>ublox_f9p/fix</topic>
+            <gz_frame_id>gps_main_antenna_link</gz_frame_id>
+            <!-- Refer to https://sdformat.org/spec/1.12/sensor/#sensor_navsat for add noise -->
+        </sensor>
+    </gazebo>
+
+</robot>

@@ -7,6 +7,13 @@
 
     <xacro:include filename="$(find skd100_description)/urdf/core.urdf.xacro" />
 
+    <!-- Gazebo simulation  -->
+    <xacro:if value="$(arg is_sim)">
+        <!-- Use ros2_control -->
+        <xacro:include filename="$(find skd100_description)/urdf/sim_ros2_control.urdf.xacro" />
+        <xacro:include filename="$(find skd100_description)/urdf/sim_sensors.urdf.xacro" />
+    </xacro:if>
+
     <!-- Hardware -->
     <xacro:unless value="$(arg is_sim)">
         <xacro:include filename="$(find skd100_description)/urdf/ros2_control.urdf.xacro" />
