@@ -227,7 +227,7 @@
 	<!-- Ardusimple RTK Heading rover antenna -->
 	<link name="gps_main_antenna_link">
 		<visual>
-			<origin xyz="0 0 ${0.006}" rpy="0 0 0"/>
+			<origin xyz="0 0 ${0.006}" rpy="0 0 ${pi}"/>
 			<geometry>
 				<mesh filename="package://skd100_description/meshes/ANT2B-ANN.stl"  scale="0.001 0.001 0.001"/>
 			</geometry>
@@ -247,7 +247,7 @@
 	<!-- Ardusimple RTK Heading moving base antenna -->
 	<link name="gps_second_antenna_link">
 		<visual>
-			<origin xyz="0 0 ${0.006}" rpy="0 0 ${-pi/2}"/>
+			<origin xyz="0 0 ${0.006}" rpy="0 0 ${pi}"/>
 			<geometry>
 				<mesh filename="package://skd100_description/meshes/ANT2B-ANN.stl"  scale="0.001 0.001 0.001"/>
 			</geometry>
